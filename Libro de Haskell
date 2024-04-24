@@ -98,3 +98,5 @@ tests = test [
 
 -- sonIguales :: (Eq t) => [t] -> [t] -> Bool
 -- sonIguales xs ys = incluido xs ys && incluido ys xs 
+
+Comprobante de parcial RPtgrt7N
