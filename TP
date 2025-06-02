@@ -1,0 +1,85 @@
+# Trabajo Práctico
+
+type EstadoJuego = dict[str, any]
+
+BOMBA: str = chr(128163)
+BANDERA: str = chr(128681)
+VACIO: str = ' '
+
+# Ejercicio 1. 
+ 
+
+# problema crear juego (in filas: Z, in columnas: Z, in minas: Z) : EstadoJuego 
+
+def crear_juego(filas: int, columnas: int, minas: int) -> EstadoJuego:
+    Estado: EstadoJuego = { "filas": filas,
+                            "columnas": columnas, 
+                            "minas": minas,
+                            "tablero_visible": tablero_visible(filas,columnas),
+                            "juego_terminado": False,
+                            "tablero": list[list[int]]
+                            }
+
+def tablero_visible(filas: int, columnas: int) -> list[list[any]]:
+    matriz: list[list[any]] = []
+    for i in range(filas):
+        n_columnas: list[any] = []
+        for h in range(columnas):
+            n_columnas.append(VACIO)
+        matriz.append(n_columnas)
+    return matriz
+
+print(tablero_visible(2,2))
+
+# problema son matriz y misma dimension (in t1, t2 : seq⟨seq⟨T⟩⟩) : Bool 
+
+
+def son_matriz_y_misma_dimension(t1, t2: list[list[any]]) -> bool:
+    res: bool = False
+    if (es_matriz(t1) == True and es_matriz(t2) == True and ((len(t1) == len(t2)) == True) and ((len(t1[0]) == len(t1)[0]) == True)):
+        res = True
+    return res
+    
+
+# problema estructura y tipos validos (in estado: EstadoJuego) : Bool
+
+def estructura_tipos_validos(estado: EstadoJuego) -> bool:
+    if(estado['filas'] > 0 and estado['columnas'] > 0 and (estado['minas'] > 0 and (estado['minas'] < (estado['columnas']*estado['filas']))) and (valor_valido(estado['tablero']) == True) 
+       and valor_valido_str(estado['tablero_visible']) == True and son_matriz_y_misma_dimension(estado['tablero'],estado['tablero_visible']) == True and len(estado['tablero']) == estado['filas'] 
+       and len(estado['tablero'][0]) == estado['columnas']):
+        return True
+    else:
+        return False 
+
+
+def pertenece(s: list[int], e: int) -> bool:
+    res: bool = False
+    for i in range(0, len(s)):
+        if (s[i] == e):
+            res = True
+    return res
+
+def valor_valido(tablero: list[list[int]]) -> bool:
+    valores_validos: list[int] = [-1,0,1,2,3,4,5,6,7,8]
+    for i in range(len(tablero)):
+        for h in range(len(tablero[i])):
+            if (pertenece(valores_validos,tablero[i][h]) == False):
+                return False
+    return True
+
+
+def valor_valido_str(tablero_visible: list[list[any]]) -> bool:
+    valores_validos: list[int] = [BOMBA, BANDERA, VACIO,0,1,2,3,4,5,6,7,8]
+    for i in range(len(tablero_visible)):
+        for h in range(len(tablero_visible[i])):
+            if (pertenece(valores_validos,tablero_visible[i][h]) == False):
+                return False
+    return True
+
+
+def es_matriz(s: list[list[int]]) -> bool: # Al que hizo El ejercicio 1 tiene que reemplazar esto.
+    for i in range(len(s)):
+        for h in range(len(s[i])):
+            if (len(s) == len(s[i])):
+                return True
+            return False
