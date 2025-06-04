@@ -19,6 +19,8 @@ def crear_juego(filas: int, columnas: int, minas: int) -> EstadoJuego:
                             "juego_terminado": False,
                             "tablero": list[list[int]]
                             }
+    for clave, valor in Estado.items():
+        print(f"{clave}: {valor}")
 
 def tablero_visible(filas: int, columnas: int) -> list[list[any]]:
     matriz: list[list[any]] = []
@@ -83,3 +85,58 @@ def es_matriz(s: list[list[int]]) -> bool: # Al que hizo El ejercicio 1 tiene qu
             if (len(s) == len(s[i])):
                 return True
             return False
+
+# problema estado valido (in estado: EstadoJuego) : Bool
+
+def estado_valido(estado: EstadoJuego) -> bool:
+    if(estructura_tipos_validos(estado) == True and minas_validas(estado) == True and estado['tablero'] == calcular_numeros(estado['tablero']) and
+       no_es_BOMBA_VACIO_BANDERA(estado) == True):
+        if(todas_celdas_seguras_descubiertas(estado['tablero'],estado['tablero_visible'] == True or busca_bomba(estado['tablero_visible'] == True))):
+            estado['juego_terminado'] = True
+            return True
+    return False
+       
+def busca_bomba(tablero_visible: list[list[any]]) -> bool:
+    for i in range(len(tablero_visible)):
+        for j in range(len(tablero_visible)):
+            if(tablero_visible[i][j] == BOMBA):
+                return True
+    return False
+
+def no_es_BOMBA_VACIO_BANDERA(estado: EstadoJuego) -> bool:
+    for i in range(len(estado['tablero_visible'])):
+        for j in range(estado['tablero_visible']):
+            if(estado['tablero_visible'][i][j] != VACIO and estado['tablero_visible'][i][j] != BOMBA and estado['tablero_visible'][i][j] != BANDERA):
+                return True
+    return False
+
+def minas_validas(estado: EstadoJuego) -> bool:
+    cantidad_minas: int = 0
+    for i in range(len(estado['tablero'])):
+        for j in range(len(estado['tablero'][0])):
+            if(estado['tablero'][i][j] == -1):
+                cantidad_minas = cantidad_minas + 1
+    if(cantidad_minas == estado['minas']):
+        return True
+    else:
+        return False  
+
+#problema todas celdas seguras descubiertas (in tablero: seq⟨seq⟨Z⟩⟩, tablero visible: seq⟨seq⟨String⟩⟩) : Bool
+
+def todas_celdas_seguras_descubiertas(tablero: list[list[int]], tablero_visible: list[list[any]]) -> bool:
+    for i in range(len(tablero)):
+        for j in range(len(tablero[0])):
+            if(tablero[i][j] == (-1) and (tablero_visible[i][j] != VACIO and tablero_visible[i][j] != BANDERA)):
+                return False
+            if(tablero[i][j] != (-1) and tablero_visible[i][j] != str(tablero[i][j])):
+                return False
+    return True
+
+print(todas_celdas_seguras_descubiertas([[1,1],[1,-1]],[['1','1'],['1',VACIO]]))
+print("/////////////")
+
+crear_juego(2,2,1)
+
+# Funciones de otros ejrecicios
+def calcular_numeros(tablero: list[list[int]]):
+    return True
